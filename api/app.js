@@ -8,6 +8,11 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors());
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
   res.send(process.env.REACT_APP_TIN_DEP_TRAI);
@@ -16,12 +21,6 @@ app.get('/', (req, res) => {
 app.get('/api/ss/data', (req, res) => {
   return res.json({ data: ['1', '2', '69'] });
 });
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

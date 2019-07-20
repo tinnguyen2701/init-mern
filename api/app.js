@@ -1,19 +1,23 @@
-const createError = require('http-errors');
 const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
 const cors = require('cors');
+const bodyParser = require('body-parser');
+// const mongoose = require('mongoose');
 
+// init app
 const app = express();
 
-app.use(cors());
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// connect db
+// mongoose
+//   .connect(process.env.MONGODB_URL, { useNewUrlParser: true })
+//   .then(() => console.log('connected db'))
+//   .catch(err => console.log(err));
 
+// middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// router
 app.get('/', (req, res) => {
   res.send(process.env.REACT_APP_TIN_DEP_TRAI);
 });
@@ -22,20 +26,7 @@ app.get('/api/ss/data', (req, res) => {
   return res.json({ data: ['1', '2', '69'] });
 });
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  next(createError(404));
-});
-
-// error handler
-app.use((err, req, res) => {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;
+// start server
+app.listen(process.env.PORT_SERVER, () =>
+  console.log(`server is running on port ${process.env.PORT_SERVER}`),
+);
